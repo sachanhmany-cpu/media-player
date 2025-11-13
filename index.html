@@ -30,7 +30,6 @@
             gap: 1.5rem;
         }
 
-        /* Video styles */
         video { 
             width: 100%; 
             height: auto; 
@@ -39,12 +38,10 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.4);
         }
         
-        /* Audio styles - hide the audio player */
         audio { 
             display: none;
         }
 
-        /* Custom button controls */
         .controls { 
             display: flex;
             align-items: center;
@@ -95,13 +92,12 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Hidden audio that plays with video -->
         <audio 
             id="audio1">
             <source src="media/twinkle.m4a" type="audio/mp4">
         </audio>
         
-        <!-- One button controls BOTH video and audio -->
+     
         <div class="controls">
             <button
                 class="media-btn"
@@ -113,7 +109,6 @@
     </main>
 
     <script>
-        // Set your image filenames here
         const PLAY_ICON  = 'images/star.png';
         const PAUSE_ICON = 'images/moon.png';
 
@@ -121,7 +116,6 @@
         const video = document.getElementById('video1');
         const audio = document.getElementById('audio1');
 
-        // When button is clicked: play/pause BOTH video and audio
         btn.addEventListener('click', () => {
             if (video.paused || video.ended) {
                 video.play();
@@ -132,7 +126,6 @@
             }
         });
 
-        // Update button image when video state changes
         const setState = (playing) => {
             btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
             btn.setAttribute('aria-label', playing ? 'pause' : 'play');
@@ -144,7 +137,6 @@
             }
         };
 
-        // Sync audio with video
         video.addEventListener('play', () => {
             audio.play();
             setState(true);
@@ -162,7 +154,6 @@
             setState(false);
         });
 
-        // Initialize button state
         setState(!video.paused && !video.ended);
     </script>
 </body>
