@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>media-player</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0;
+            padding: 0;
+        }
+        
+        body { 
+            font-family: 'Courier New', monospace;
+            background-image: url('images/pretty-background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #eee;
+            min-height: 100vh;
+            padding: 2rem;
+            display: grid;
+            place-items: center;
+        }
+        
+        main { 
+            max-width: 900px; 
+            width: 100%;
+            display: grid; 
+            gap: 1.5rem;
+        }
+
+        /* Video styles */
+        video { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+        
+        /* Audio styles - hide the audio player */
+        audio { 
+            display: none;
+        }
+
+        /* Custom button controls */
+        .controls { 
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .media-btn {
+            border: 3px solid #f39c12;
+            background: rgba(243, 156, 18, 0.2);
+            padding: 0.5rem;
+            cursor: pointer;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .media-btn:hover {
+            background: rgba(243, 156, 18, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+        }
+        
+        .media-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .media-btn img { 
+            width: 72px; 
+            height: 72px; 
+            display: block;
+            filter: brightness(1.2);
+        }
+        
+        .media-btn:focus-visible { 
+            outline: 3px solid #5a8dff; 
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <video 
+            id="video1"
+            controls>
+            <source src="media/star.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Hidden audio that plays with video -->
+        <audio 
+            id="audio1">
+            <source src="media/twinkle.m4a" type="audio/mp4">
+        </audio>
+        
+        <!-- One button controls BOTH video and audio -->
+        <div class="controls">
+            <button
+                class="media-btn"
+                id="media-btn"
+                aria-label="play">
+                <img src="images/star.png" alt="play">
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Set your image filenames here
+        const PLAY_ICON  = 'images/star.png';
+        const PAUSE_ICON = 'images/moon.png';
+
+        const btn = document.getElementById('media-btn');
+        const video = document.getElementById('video1');
+        const audio = document.getElementById('audio1');
+
+        // When button is clicked: play/pause BOTH video and audio
+        btn.addEventListener('click', () => {
+            if (video.paused || video.ended) {
+                video.play();
+                audio.play();
+            } else {
+                video.pause();
+                audio.pause();
+            }
+        });
+
+        // Update button image when video state changes
+        const setState = (playing) => {
+            btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+            btn.setAttribute('aria-label', playing ? 'pause' : 'play');
+            
+            const img = btn.querySelector('img');
+            if (img) {
+                img.src = playing ? PAUSE_ICON : PLAY_ICON;
+                img.alt = playing ? 'pause' : 'play';
+            }
+        };
+
+        // Sync audio with video
+        video.addEventListener('play', () => {
+            audio.play();
+            setState(true);
+        });
+        
+        video.addEventListener('pause', () => {
+            audio.pause();
+            setState(false);
+        });
+        
+        video.addEventListener('ended', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            video.currentTime = 0;
+            setState(false);
+        });
+
+        // Initialize button state
+        setState(!video.paused && !video.ended);
+    </script>
+</body>
+</html>
